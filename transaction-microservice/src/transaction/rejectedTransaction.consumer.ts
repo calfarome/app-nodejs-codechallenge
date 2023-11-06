@@ -19,7 +19,13 @@ export class RejectedTransactionConsumer implements OnModuleInit {
       CONSUMER_GROUP.REJECTED_TRANSACTION_CONSUMER_GROUP,
       { topic: TRANSACTION_STATUS.REJECTED },
       {
-        eachMessage: async ({ message }) => {
+        eachMessage: async ({ topic, partition,message }) => {
+          console.log({
+            source: 'EVENT FROM ANTI FRAUD MICROSERVICE',
+            message: JSON.parse(message.value.toString()),
+            partition: partition.toString(),
+            topic: topic.toString(),
+          });
           const msg = JSON.parse(message.value.toString());
           const transactionStatus = await this.transactionStatusService.findOneByName(TRANSACTION_STATUS.REJECTED);
           const transaction = new UpdateTransactionInput();

@@ -17,7 +17,13 @@ export class PendingTransactionConsumer implements OnModuleInit {
       CONSUMER_GROUP.PENDING_TRANSACTION_CONSUMER_GROUP,
       { topic: TRANSACTION_STATUS.PENDING },
       {
-        eachMessage: async ({ message }) => {
+        eachMessage: async ({ topic, partition,message }) => {
+          console.log({
+            source: 'EVENT FROM TRANSACTION EVENT',
+            message: JSON.parse(message.value.toString()),
+            partition: partition.toString(),
+            topic: topic.toString(),
+          });
           const msg = JSON.parse(message.value.toString())
           const transactionInfo: ITransactionMessage = {
             id: msg.id,
